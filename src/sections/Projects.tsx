@@ -28,11 +28,11 @@ function ProjectBlock({
 }) {
   const ref = useReveal<HTMLDivElement>();
   return (
-    <section id={id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 border-t border-border/60 px-6 py-20">
+    <section id={id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 border-t-2 border-border px-6 py-20">
       <div className="fade-up mb-10">
         <p className="text-xs tracking-[0.3em] text-primary">{index}</p>
         <div className="mt-3 flex flex-wrap items-center gap-4">
-          <h2 className="bg-primary/15 px-3 py-1 text-3xl font-bold text-foreground">{title}</h2>
+          <h2 className="bg-primary/15 px-3 py-1 text-4xl font-bold text-foreground">{title}</h2>
           <span className="rounded-full border border-primary/40 px-3 py-1 text-xs text-primary">{badge}</span>
         </div>
         <div className="section-rule mt-4" />
@@ -126,11 +126,11 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
   }, [zoom]);
 
   return (
-    <section id={project.id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 border-t border-border/60 px-6 py-20">
+    <section id={project.id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
       <div className="fade-up mb-8">
         <p className="text-xs tracking-[0.3em] text-primary">{project.index}</p>
         <div className="mt-3 flex flex-wrap items-center gap-4">
-          <h2 className="bg-primary/15 px-3 py-1 text-3xl font-bold text-foreground">{project.title}</h2>
+          <h2 className="bg-primary/15 px-3 py-1 text-4xl font-bold text-foreground">{project.title}</h2>
           <span className="rounded-full border border-primary/40 px-3 py-1 text-xs text-primary">{project.badge}</span>
         </div>
         <div className="section-rule mt-4" />
@@ -260,11 +260,11 @@ function HealthProject({ project }: { project: (typeof projects)[number] }) {
   ];
 
   return (
-    <section id={project.id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 border-t border-border/60 px-6 py-20">
+    <section id={project.id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 border-t-2 border-border px-6 py-20">
       <div className="fade-up mb-8">
         <p className="text-xs tracking-[0.3em] text-primary">{project.index}</p>
         <div className="mt-3 flex flex-wrap items-center gap-4">
-          <h2 className="bg-primary/15 px-3 py-1 text-3xl font-bold text-foreground">{project.title}</h2>
+          <h2 className="bg-primary/15 px-3 py-1 text-4xl font-bold text-foreground">{project.title}</h2>
           <span className="rounded-full border border-primary/40 px-3 py-1 text-xs text-primary">{project.badge}</span>
         </div>
         <div className="section-rule mt-4" />
@@ -308,8 +308,8 @@ function HealthProject({ project }: { project: (typeof projects)[number] }) {
           自用体验良好——跨病症的关联分析（如气胸 ↔ 换季、空调 ↔ 尘螨的假设验证）确实带来了新的洞察。
           第一个外部用户：同学因舅姥爷患小细胞肺癌找来，用这套系统整理病史，反馈「确实有用」。
         </p>
-        <div className="mt-5 grid grid-cols-2 gap-4">
-          <figure className="glass-card p-2">
+        <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4">
+          <figure className="glass-card p-2 md:col-span-2">
             <img
               src="/img/health/case-request.png"
               alt="同学来要病例 skill"
@@ -321,7 +321,7 @@ function HealthProject({ project }: { project: (typeof projects)[number] }) {
               用户主动找来 · 索要病例 Skill
             </figcaption>
           </figure>
-          <figure className="glass-card p-2">
+          <figure className="glass-card p-2 md:col-span-2">
             <img
               src="/img/health/case-feedback.png"
               alt="用户反馈"
