@@ -98,22 +98,18 @@ function OrbRow({ src, title, desc }: { src: string; title: string; desc: string
   );
 }
 
-/** 手机截图：统一尺寸，半透明遮罩降对比，悬停显清晰，可点击放大 */
+/** 手机截图：统一尺寸，可点击放大 */
 function PhoneShot({ src, caption, onZoom }: { src: string; caption: string; onZoom: (s: string) => void }) {
   return (
-    <figure className="glass-card group p-2">
-      <div className="relative overflow-hidden rounded-lg">
-        <img
-          src={src}
-          alt={caption}
-          loading="lazy"
-          onClick={() => onZoom(src)}
-          className="mx-auto w-full cursor-zoom-in"
-        />
-        {/* 半透明灰遮罩：压低截图内文字与背景的对比度，悬停移除 */}
-        <div className="pointer-events-none absolute inset-0 bg-[rgba(110,120,128,0.32)] transition-opacity duration-300 group-hover:opacity-0" />
-      </div>
-      <figcaption className="py-2 text-center text-sm font-medium leading-5 text-foreground/90">{caption}</figcaption>
+    <figure className="glass-card p-2">
+      <img
+        src={src}
+        alt={caption}
+        loading="lazy"
+        onClick={() => onZoom(src)}
+        className="mx-auto w-full cursor-zoom-in rounded-lg"
+      />
+      <figcaption className="py-2 text-center text-base font-medium leading-6 text-foreground">{caption}</figcaption>
     </figure>
   );
 }
@@ -174,17 +170,17 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
 
       {/* 全宽工作流：按功能分四排，截图统一尺寸（4 列） */}
       <div className="fade-up mt-12">
-        <h3 className="text-xl font-bold text-foreground">一次完整使用的工作流</h3>
+        <h3 className="text-2xl font-bold text-foreground">一次完整使用的工作流</h3>
 
         {/* 第一排：主题切换 */}
-        <p className="mt-6 text-sm font-semibold text-primary">主题切换 · 亮色 / 暗色双主题</p>
+        <p className="mt-6 text-lg font-bold text-primary">主题切换 · 亮色 / 暗色双主题</p>
         <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
           <PhoneShot src="/img/voice/theme-light.png" caption="亮色主题" onZoom={setZoom} />
           <PhoneShot src="/img/voice/theme-dark.png" caption="暗色主题" onZoom={setZoom} />
         </div>
 
         {/* 第二排：语音对话三连 */}
-        <p className="mt-6 text-sm font-semibold text-primary">语音对话 · 从问答到指挥</p>
+        <p className="mt-6 text-lg font-bold text-primary">语音对话 · 从问答到指挥</p>
         <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
           <PhoneShot src="/img/voice/convo-hello.png" caption="唤醒对话 ·「你好，你能做什么」" onZoom={setZoom} />
           <PhoneShot src="/img/voice/step2-sendmsg.png" caption="发消息 ·「帮我给爸爸发一条消息」" onZoom={setZoom} />
@@ -192,7 +188,7 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
         </div>
 
         {/* 第三排：提醒闭环 */}
-        <p className="mt-6 text-sm font-semibold text-primary">提醒闭环 · 一句话创建 → 触发 → 管理</p>
+        <p className="mt-6 text-lg font-bold text-primary">提醒闭环 · 一句话创建 → 触发 → 管理</p>
         <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
           <PhoneShot src="/img/voice/remind-2pm5pm.png" caption="创建 ·「定下午 2 点和 5 点的提醒」" onZoom={setZoom} />
           <PhoneShot src="/img/voice/step6-remind-alert.png" caption="触发 · 响铃震动，息屏也生效" onZoom={setZoom} />
@@ -201,7 +197,7 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
         </div>
 
         {/* 第四排：记忆系统 */}
-        <p className="mt-6 text-sm font-semibold text-primary">记忆系统 · 历史可回溯，可延续</p>
+        <p className="mt-6 text-lg font-bold text-primary">记忆系统 · 历史可回溯，可延续</p>
         <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
           <PhoneShot src="/img/voice/step7-history.png" caption="会话历史 · 过往对话全量保存" onZoom={setZoom} />
           <PhoneShot src="/img/voice/theme-resume.png" caption="继续这段对话 · 从任意历史会话接续" onZoom={setZoom} />
@@ -210,7 +206,7 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
 
       {/* 全宽工作台 */}
       <div className="fade-up mt-12">
-        <h3 className="text-xl font-bold text-foreground">电脑工作台 · 监视正在进行的对话</h3>
+        <h3 className="text-2xl font-bold text-foreground">电脑工作台 · 监视正在进行的对话</h3>
         <div className="mt-4">
           <Figure
             src="/img/workbench.png"
