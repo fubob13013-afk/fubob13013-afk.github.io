@@ -10,7 +10,7 @@ export type ArtWork = {
   story: string[];
   quote?: string;
   params: [string, string][];
-  gallery: { src: string; alt: string; wide?: boolean }[];
+  gallery: { src: string; alt: string; wide?: boolean; process?: boolean }[];
 };
 
 export const artworks: ArtWork[] = [
@@ -66,7 +66,8 @@ export const artworks: ArtWork[] = [
     gallery: [
       { src: "/img/art/ascend_1_521.png", alt: "Endless Ascent 宽幅渲染", wide: true },
       { src: "/img/art/ascend_166_235.png", alt: "Endless Ascent 场景渲染" },
-      { src: "/img/art/ascend_161_227.png", alt: "Endless Ascent 细节渲染" },
+      { src: "/img/art/ascend_161_227.png", alt: "Endless Ascent 风暴场景" },
+      { src: "/img/art/ascend_161_228.png", alt: "Endless Ascent 冬季场景" },
     ],
   },
   {
@@ -90,10 +91,14 @@ export const artworks: ArtWork[] = [
       ["剪辑", "Premiere Pro"],
     ],
     gallery: [
-      { src: "/img/art/deathstranding_1_583.png", alt: "Death Stranding 宽幅渲染", wide: true },
-      { src: "/img/art/deathstranding_89_18.png", alt: "Death Stranding 场景渲染" },
-      { src: "/img/art/deathstranding_80_2.png", alt: "Death Stranding 环境渲染" },
-      { src: "/img/art/deathstranding_86_12.png", alt: "Death Stranding 氛围渲染", wide: true },
+      { src: "/img/art/deathstranding_1_583.png", alt: "Death Stranding 主渲染", wide: true },
+      { src: "/img/art/deathstranding_89_18.png", alt: "Death Stranding 宽幅场景" },
+      { src: "/img/art/deathstranding_80_2.png", alt: "Death Stranding 细节 1" },
+      { src: "/img/art/deathstranding_86_12.png", alt: "Death Stranding 细节 2" },
+      { src: "/img/art/deathstranding_77_68.png", alt: "Death Stranding 海报概念图", wide: true },
+      { src: "/img/art/deathstranding_89_15.png", alt: "制作过程 1", process: true },
+      { src: "/img/art/deathstranding_89_16.png", alt: "制作过程 2", process: true },
+      { src: "/img/art/deathstranding_89_17.png", alt: "制作过程 3", process: true },
     ],
   },
   {

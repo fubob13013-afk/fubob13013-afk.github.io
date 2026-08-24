@@ -309,7 +309,7 @@ function HealthProject({ project }: { project: (typeof projects)[number] }) {
           第一个外部用户：同学因舅姥爷患小细胞肺癌找来，用这套系统整理病史，反馈「确实有用」。
         </p>
         <div className="mt-5 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <figure className="glass-card p-2 md:col-span-2">
+          <figure className="glass-card p-2">
             <img
               src="/img/health/case-request.png"
               alt="同学来要病例 skill"
@@ -321,7 +321,7 @@ function HealthProject({ project }: { project: (typeof projects)[number] }) {
               用户主动找来 · 索要病例 Skill
             </figcaption>
           </figure>
-          <figure className="glass-card p-2 md:col-span-2">
+          <figure className="glass-card p-2">
             <img
               src="/img/health/case-feedback.png"
               alt="用户反馈"

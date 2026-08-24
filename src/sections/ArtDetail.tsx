@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { artworks } from "@/art";
 
 /** 作品详情页：版式复刻原作品集站点（纯黑背景 · 原图比例 · Italiana 展示字体） */
+export type GalleryItem = { src: string; alt: string; wide?: boolean; process?: boolean };
+
 export function ArtDetail({ slug }: { slug: string }) {
   const work = artworks.find((w) => w.slug === slug);
   const [zoom, setZoom] = useState<string | null>(null);
@@ -18,6 +20,9 @@ export function ArtDetail({ slug }: { slug: string }) {
   }, [zoom]);
 
   if (!work) return null;
+
+  const galleryItems = work.gallery.filter((g) => !g.process);
+  const processItems = work.gallery.filter((g) => g.process);
 
   const backLink = (
     <a
@@ -89,7 +94,7 @@ export function ArtDetail({ slug }: { slug: string }) {
 
         {/* 画廊：原图比例，仅对齐排布 */}
         <div className="mt-16 grid justify-items-center gap-5 md:grid-cols-2">
-          {work.gallery.map((g) => (
+          {galleryItems.map((g) => (
             <button
               key={g.src}
               onClick={() => setZoom(g.src)}
@@ -104,6 +109,25 @@ export function ArtDetail({ slug }: { slug: string }) {
             </button>
           ))}
         </div>
+
+        {/* 制作过程（原站 process-grid） */}
+        {processItems.length > 0 && (
+          <div className="mt-16">
+            <h3 className="font-display text-3xl font-normal text-primary">Process</h3>
+            <div className="mt-6 grid gap-5 md:grid-cols-3">
+              {processItems.map((g) => (
+                <button key={g.src} onClick={() => setZoom(g.src)} className="overflow-hidden">
+                  <img
+                    src={g.src}
+                    alt={g.alt}
+                    loading="lazy"
+                    className="h-auto w-full transition-transform duration-400 hover:scale-[1.05]"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         <p className="mt-16 text-center font-display text-sm font-light text-white/30">
           {work.oneliner}
