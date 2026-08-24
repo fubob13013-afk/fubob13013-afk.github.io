@@ -79,28 +79,30 @@ function Figure({ src, alt, caption, className }: { src: string; alt: string; ca
   );
 }
 
-/** 三态语音球：圆形裁切 + 边缘暗角压白（与 App 内 MediaOrb 同方案，MP4 无 alpha） */
-function OrbState({ src, label, size }: { src: string; label: string; size: "lg" | "sm" }) {
+/** 三态语音球：紧裁切圆形，视频轻微放大让圆边刚好卡在球体上 */
+function OrbRow({ src, title, desc, big }: { src: string; title: string; desc: string; big?: boolean }) {
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="flex items-center gap-4">
       <div
-        className={`relative overflow-hidden rounded-full ${
-          size === "lg" ? "h-44 w-44 md:h-56 md:w-56" : "h-28 w-28 md:h-32 md:w-32"
+        className={`relative shrink-0 overflow-hidden rounded-full ${
+          big ? "h-32 w-32 md:h-40 md:w-40" : "h-20 w-20 md:h-24 md:w-24"
         }`}
       >
-        <video src={src} autoPlay loop muted playsInline className="h-full w-full object-cover" />
-        {/* 边缘暗角：压掉圆形边界处的白底残留 */}
+        <video src={src} autoPlay loop muted playsInline className="h-full w-full scale-[1.06] object-cover" />
         <div
           className="pointer-events-none absolute inset-0 rounded-full"
-          style={{ boxShadow: "inset 0 0 18px 10px rgba(11,15,20,0.55)" }}
+          style={{ boxShadow: "inset 0 0 10px 4px rgba(11,15,20,0.35)" }}
         />
       </div>
-      <p className="text-center text-xs text-muted-foreground">{label}</p>
+      <div className="min-w-0">
+        <p className={`font-semibold ${big ? "text-base text-primary" : "text-sm text-foreground"}`}>{title}</p>
+        <p className="mt-0.5 text-xs leading-5 text-muted-foreground">{desc}</p>
+      </div>
     </div>
   );
 }
 
-/** 手机截图：可点击放大 */
+/** 手机截图：原始比例完整展示，可点击放大 */
 function PhoneShot({ src, caption, onZoom }: { src: string; caption: string; onZoom: (s: string) => void }) {
   return (
     <figure className="glass-card p-2">
@@ -109,14 +111,16 @@ function PhoneShot({ src, caption, onZoom }: { src: string; caption: string; onZ
         alt={caption}
         loading="lazy"
         onClick={() => onZoom(src)}
-        className="mx-auto h-80 cursor-zoom-in rounded-lg object-cover object-top md:h-96"
+        className="mx-auto w-full cursor-zoom-in rounded-lg"
       />
       <figcaption className="py-2 text-center text-xs leading-5 text-muted-foreground">{caption}</figcaption>
     </figure>
   );
 }
 
-function VoiceMedia() {
+/** 语音助手项目：全宽上下布局（决策+三球左右 · 状态流全宽 · 工作台收尾） */
+function VoiceProject({ project }: { project: (typeof projects)[number] }) {
+  const ref = useReveal<HTMLDivElement>();
   const [zoom, setZoom] = useState<string | null>(null);
   useEffect(() => {
     document.body.style.overflow = zoom ? "hidden" : "";
@@ -136,40 +140,74 @@ function VoiceMedia() {
   ];
 
   return (
-    <div className="space-y-6">
-      {/* 三态语音球 */}
-      <div className="glass-card p-5">
-        <p className="text-sm font-semibold text-primary">三态语音球（真机在用）</p>
-        <div className="mt-5 flex items-end justify-center gap-6 md:gap-10">
-          <OrbState src="/video/orb/orb-idle.mp4" label="待机 DORMANT" size="sm" />
-          <OrbState src="/video/orb/orb-listening.mp4" label="聆听 LISTENING（大球 · 可讲话）" size="lg" />
-          <OrbState src="/video/orb/orb-working.mp4" label="工作中 WORKING（小球 · 勿扰）" size="sm" />
+    <section id={project.id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
+      <div className="fade-up mb-8">
+        <p className="text-xs tracking-[0.3em] text-primary">{project.index}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-4">
+          <h2 className="text-3xl font-bold text-foreground">{project.title}</h2>
+          <span className="rounded-full border border-primary/40 px-3 py-1 text-xs text-primary">{project.badge}</span>
         </div>
-        <p className="mt-4 text-center text-xs text-muted-foreground">
-          球体大小即状态语义：聆听时放大暗示「可以说话」，处理时缩小暗示「稍勿打扰」
-        </p>
+        <div className="section-rule mt-4" />
+        <p className="mt-6 max-w-4xl text-lg font-medium leading-relaxed text-foreground/90">{project.oneliner}</p>
+        <p className="mt-3 max-w-4xl text-sm leading-relaxed text-muted-foreground">{project.intro}</p>
       </div>
 
-      {/* 使用流程状态图 */}
-      <div className="glass-card p-5">
-        <p className="text-sm font-semibold text-primary">一次完整使用的状态流</p>
-        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-          {steps.slice(0, 4).map(([src, title, desc]) => (
+      {/* 局部左右：决策（左）· 三态球竖排（右） */}
+      <div className="fade-up grid gap-6 lg:grid-cols-[1fr_400px]">
+        <div>
+          <h3 className="text-sm font-semibold tracking-widest text-primary">关键产品决策</h3>
+          <ul className="mt-4 grid gap-4 md:grid-cols-2">
+            {project.decisions.map((d) => (
+              <li key={d.title} className="glass-card p-4">
+                <p className="font-semibold text-foreground">{d.title}</p>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{d.desc}</p>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-4 border-l-4 border-primary bg-muted/60 p-4 text-sm leading-relaxed text-foreground/90">
+            <span className="font-semibold text-primary">验证结果：</span>
+            {project.result}
+          </div>
+        </div>
+        <div className="glass-card p-6">
+          <p className="text-sm font-semibold text-primary">三态语音球（真机在用）</p>
+          <div className="mt-6 space-y-7">
+            <OrbRow src="/video/orb/orb-idle.mp4" title="待机 DORMANT" desc="会话外默认小球，安静等待" />
+            <OrbRow
+              src="/video/orb/orb-listening.mp4"
+              title="聆听 LISTENING"
+              desc="大球放大——暗示「可以讲话」"
+              big
+            />
+            <OrbRow src="/video/orb/orb-working.mp4" title="工作中 WORKING" desc="缩小+低亮度——暗示「稍勿打扰」" />
+          </div>
+          <p className="mt-6 text-xs leading-5 text-muted-foreground">
+            球体大小即状态语义：无需文字，一眼读懂助手当前能否插话。
+          </p>
+        </div>
+      </div>
+
+      {/* 全宽状态流：原始手机比例，大图 */}
+      <div className="fade-up mt-12">
+        <h3 className="text-sm font-semibold tracking-widest text-primary">一次完整使用的状态流</h3>
+        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {steps.map(([src, title, desc]) => (
             <PhoneShot key={src} src={src} caption={`${title} · ${desc}`} onZoom={setZoom} />
           ))}
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
-          {steps.slice(4).map(([src, title, desc]) => (
-            <PhoneShot key={src} src={src} caption={`${title} · ${desc}`} onZoom={setZoom} />
-          ))}
-        </div>
       </div>
 
-      <Figure
-        src="/img/workbench.png"
-        alt="电脑工作台全链路时间线"
-        caption="电脑工作台：监视正在进行的对话 · 全链路时间线（用户 / 豆包 / 工具 / Claude / 系统），永久保存"
-      />
+      {/* 全宽工作台 */}
+      <div className="fade-up mt-12">
+        <h3 className="text-sm font-semibold tracking-widest text-primary">电脑工作台 · 监视正在进行的对话</h3>
+        <div className="mt-4">
+          <Figure
+            src="/img/workbench.png"
+            alt="电脑工作台全链路时间线"
+            caption="全链路时间线（用户 / 豆包 / 工具 / Claude / 系统），永久保存——手机下达指令，电脑全程可视"
+          />
+        </div>
+      </div>
 
       {/* 点击放大 */}
       {zoom && (
@@ -181,7 +219,7 @@ function VoiceMedia() {
           <p className="absolute bottom-6 text-xs tracking-widest text-white/40">点击任意处关闭</p>
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
@@ -268,13 +306,15 @@ function CyberEyesMedia() {
   );
 }
 
-const medias = [<VoiceMedia key="v" />, <HealthMedia key="h" />, <CyberEyesMedia key="c" />];
+const medias = [null, <HealthMedia key="h" />, <CyberEyesMedia key="c" />];
 
 export function Projects() {
   return (
     <div>
-      {projects.map((p, i) => (
-        <ProjectBlock key={p.id} {...p} media={medias[i]} flip={i % 2 === 1} />
+      {/* 语音助手：全宽上下布局 */}
+      <VoiceProject project={projects[0]} />
+      {projects.slice(1).map((p, i) => (
+        <ProjectBlock key={p.id} {...p} media={medias[i + 1]} flip={i % 2 === 0} />
       ))}
     </div>
   );
