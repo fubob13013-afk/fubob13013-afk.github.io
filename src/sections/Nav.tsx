@@ -6,7 +6,7 @@ const links = [
   { href: "#voice-assistant", label: "语音助手" },
   { href: "#health-record", label: "健康病例系统" },
   { href: "#cybereyes", label: "CyberEyes" },
-  { href: "#visual", label: "视觉作品" },
+  { href: "#art", label: "3D 艺术" },
   { href: "#about", label: "关于我" },
 ];
 

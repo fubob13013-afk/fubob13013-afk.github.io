@@ -111,13 +111,58 @@ function VoiceMedia() {
 function HealthMedia() {
   return (
     <div className="space-y-6">
-      <Figure src="/img/health-ui.png" alt="健康病例系统首页" caption="AI 驱动的健康档案界面" />
-      <div className="glass-card p-5 text-sm leading-relaxed text-muted-foreground">
-        <p className="font-semibold text-primary">三端架构</p>
-        <p className="mt-2">
-          拍照 → AI 自动提取化验单关键指标 → 结构化归档 → 跨病症关联分析。症状日志与体检指标统一字段标准，长期可追踪。
-        </p>
+      {/* 数据流：拍照 → AI 提取 → 结构化归档 → 关联分析 */}
+      <div className="glass-card p-5">
+        <p className="text-sm font-semibold text-primary">系统数据流</p>
+        <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
+          {["拍化验单", "AI 自动提取", "结构化归档", "跨病症关联分析"].map((step, i) => (
+            <span key={step} className="flex items-center gap-2">
+              <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-foreground">
+                {step}
+              </span>
+              {i < 3 && <span className="text-primary">→</span>}
+            </span>
+          ))}
+        </div>
       </div>
+
+      {/* 档案结构：4 病症档案 + 3 追踪表 + 字段标准 */}
+      <div className="glass-card p-5">
+        <p className="text-sm font-semibold text-primary">档案结构（统一字段标准）</p>
+        <div className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+          {[
+            "病症档案 ×4（气胸 / 皮肤 / 鼻炎 / 肛肠消化）",
+            "症状汇总表（日期·病症·严重度·诱因）",
+            "体检指标表（结果·参考范围·趋势）",
+            "用药打卡表（用量·时段·效果与副作用）",
+          ].map((t) => (
+            <p key={t} className="rounded-md border border-border/60 bg-muted/40 px-3 py-2">
+              {t}
+            </p>
+          ))}
+        </div>
+      </div>
+
+      {/* 跨病症关联分析：产品思维核心证据 */}
+      <div className="glass-card p-5">
+        <p className="text-sm font-semibold text-primary">跨病症关联分析（假设 · 证据 · 验证）</p>
+        <div className="mt-3 space-y-2 text-xs">
+          <div className="flex items-start justify-between gap-3 rounded-md bg-muted/40 px-3 py-2">
+            <span className="text-foreground">气胸 ↔ 换季</span>
+            <span className="text-muted-foreground">高中三年换季复发规律 · 待验证</span>
+          </div>
+          <div className="flex items-start justify-between gap-3 rounded-md bg-muted/40 px-3 py-2">
+            <span className="text-foreground">空调 ↔ 鼻炎</span>
+            <span className="text-muted-foreground">多城市对照后推翻原假设：空调是协同扳机，根因尘螨 ✅</span>
+          </div>
+          <div className="flex items-start justify-between gap-3 rounded-md bg-muted/40 px-3 py-2">
+            <span className="text-foreground">鼻炎 ↔ 皮肤</span>
+            <span className="text-muted-foreground">过敏体质（Th2 偏向）可能双重影响 · 观察中</span>
+          </div>
+        </div>
+      </div>
+
+      <Figure src="/img/health-ui.png" alt="健康病例系统界面" caption="Web 界面 · AI 是操作入口（截图待更新）" />
     </div>
   );
 }
