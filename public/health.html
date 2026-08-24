@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang=zh-CN>
+<head>
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1.0">
+<title>Bob 的树屋病例</title>
+<script src=https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js></script>
+<style>
+:root{--bg-root:#FAF7F2;--bg-surface:#FFFCF7;--bg-surface-alt:#F5F0E8;--text-primary:#1A1614;--text-secondary:#7A7268;--text-tertiary:#A0998F;--border:#EDE7DF;--border-strong:#D9D0C5;--accent-teal:#2D8A7B;--accent-amber:#C4823E;--status-green:#4CAF84;--status-yellow:#D4A843;--status-red:#C4554D;--space-4:4px;--space-8:8px;--space-12:12px;--space-16:16px;--space-20:20px;--space-24:24px;--space-32:32px;--space-40:40px;--space-48:48px;--space-64:64px;--space-80:80px;--space-96:96px;--text-xs:0.75rem;--text-sm:0.875rem;--text-base:1rem;--text-lg:1.25rem;--text-xl:1.5rem;--text-2xl:2rem;--text-3xl:2.5rem;--radius-sm:4px;--radius-md:6px;--radius-lg:10px;--content-max:960px;--content-wide:1120px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;background:var(--bg-root);color:var(--text-primary);line-height:1.6;letter-spacing:-0.01em}
+a{color:var(--accent-teal);text-decoration:none}a:hover{text-decoration:underline}
+nav{position:sticky;top:0;z-index:100;background:rgba(250,247,242,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:var(--content-wide);margin:0 auto;padding:var(--space-12) var(--space-24);display:flex;justify-content:space-between;align-items:center}
+.nav-logo{font-size:var(--text-lg);font-weight:700;color:var(--text-primary)}
+.nav-links{display:flex;gap:var(--space-24);list-style:none}
+.nav-links a{color:var(--text-secondary);font-size:var(--text-sm);font-weight:500}
+.nav-links a:hover{color:var(--text-primary);text-decoration:none}
+section{padding:var(--space-80) 0}
+.section-inner{max-width:var(--content-max);margin:0 auto;padding:0 var(--space-24)}
+.section-inner-wide{max-width:var(--content-wide);margin:0 auto;padding:0 var(--space-24)}
+.section-label{font-size:var(--text-xs);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent-teal);margin-bottom:var(--space-8)}
+.section-title{font-size:var(--text-2xl);font-weight:700;letter-spacing:-0.02em;color:var(--text-primary);margin-bottom:var(--space-16);line-height:1.2}
+.section-subtitle{font-size:var(--text-base);color:var(--text-secondary);max-width:560px;line-height:1.6}
+.hero{text-align:center;padding:var(--space-96) 0 var(--space-64)}
+.hero h1{font-size:var(--text-3xl);font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin:0 0 var(--space-16)}
+.hero h1 span{color:var(--accent-amber)}
+.hero p{font-size:var(--text-lg);color:var(--text-secondary);max-width:600px;margin:0 auto var(--space-24);line-height:1.6}
+.hero .meta{font-size:var(--text-sm);color:var(--text-tertiary)}
+.card{background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:var(--space-24);transition:border-color 0.2s}
+.card:hover{border-color:var(--border-strong)}
+.card-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-24)}
+.card-grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:var(--space-24)}
+.card-grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:var(--space-16)}
+.cond-card{padding:var(--space-24)}
+.cond-card .status-row{display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12)}
+.cond-card .emoji{font-size:var(--text-2xl)}
+.cond-card .name{font-size:var(--text-xl);font-weight:700}
+.cond-card .status{font-size:var(--text-xs);padding:2px var(--space-8);border-radius:var(--radius-sm);font-weight:500}
+.cond-card .status.active{background:#FDF2F0;color:var(--status-red)}
+.cond-card .status.monitoring{background:#F2FBF6;color:var(--status-green)}
+.cond-card .status.improving{background:#F2FBF6;color:var(--status-green)}
+.cond-card .diagnosis{font-size:var(--text-sm);color:var(--text-secondary);margin-bottom:var(--space-12)}
+.cond-card .summary{font-size:var(--text-sm);color:var(--text-secondary);line-height:1.6;margin-bottom:var(--space-16)}
+.cond-card .stats{border-top:1px solid var(--border);padding-top:var(--space-16);display:flex;flex-direction:column;gap:var(--space-8)}
+.cond-card .stat-row{display:flex;justify-content:space-between;font-size:var(--text-sm)}
+.cond-card .stat-row .lbl{color:var(--text-tertiary)}
+.cond-card .stat-row .val{color:var(--text-primary);font-weight:500}
+.counter-card{text-align:center;padding:var(--space-32) var(--space-16)}
+.counter-card .num{font-size:var(--text-3xl);font-weight:800;letter-spacing:-0.03em;color:var(--accent-teal);line-height:1}
+.counter-card .lbl{font-size:var(--text-xs);color:var(--text-tertiary);margin-top:var(--space-8);text-transform:uppercase;letter-spacing:0.05em}
+.experiment-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-16)}
+.exp-card{text-align:center;padding:var(--space-20) var(--space-12);background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.exp-card .city{font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-4)}
+.exp-card .env{font-size:var(--text-xs);color:var(--text-tertiary);margin-bottom:var(--space-8)}
+.exp-card .result{font-size:var(--text-sm);font-weight:600}
+.exp-card .result.ok{color:var(--status-green)}
+.exp-card .result.bad{color:var(--status-red)}
+.exp-card .result.mild{color:var(--status-yellow)}
+.timeline{position:relative;padding-left:var(--space-32)}
+.timeline::before{content:'';position:absolute;left:11px;top:4px;bottom:4px;width:2px;background:var(--border-strong)}
+.tl-item{position:relative;margin-bottom:var(--space-24);padding-left:var(--space-32)}
+.tl-item::before{content:'';position:absolute;left:-21px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--bg-surface);border:2px solid var(--accent-teal)}
+.tl-item .tl-date{font-size:var(--text-xs);color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--space-4)}
+.tl-item .tl-title{font-size:var(--text-base);font-weight:600;margin-bottom:var(--space-4)}
+.tl-item .tl-desc{font-size:var(--text-sm);color:var(--text-secondary)}
+.chart-wrap{max-width:400px;margin:0 auto}
+.insight-card{padding:var(--space-24)}
+.insight-card .insight-label{font-size:var(--text-xs);color:var(--accent-amber);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:var(--space-8)}
+.insight-card .insight-title{font-size:var(--text-base);font-weight:700;margin-bottom:var(--space-8)}
+.insight-card .insight-detail{font-size:var(--text-sm);color:var(--text-secondary);line-height:1.6}
+.accordion{margin-bottom:var(--space-8)}
+.accordion-header{width:100%;text-align:left;background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:var(--space-16) var(--space-20);font-size:var(--text-sm);font-weight:500;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:border-color 0.2s;font-family:inherit;color:var(--text-primary)}
+.accordion-header:hover{border-color:var(--border-strong)}
+.accordion-header .arrow{transition:transform 0.2s;color:var(--text-tertiary);font-size:var(--text-xs)}
+.accordion.open .accordion-header .arrow{transform:rotate(180deg)}
+.accordion-body{display:none;padding:var(--space-16) var(--space-20);font-size:var(--text-sm);color:var(--text-secondary);line-height:1.6;background:var(--bg-surface-alt);border-radius:0 0 var(--radius-md) var(--radius-md);margin-top:-1px;border:1px solid var(--border);border-top:none}
+.accordion.open .accordion-body{display:block}
+.file-tree{font-family:SF Mono,Consolas,monospace;font-size:var(--text-sm);line-height:2}
+.file-tree .folder,.file-tree .file{display:flex;align-items:center;gap:var(--space-8);cursor:default}
+.file-tree .folder{cursor:pointer;user-select:none}
+.file-tree .folder:hover{color:var(--accent-teal)}
+.file-tree .icon{width:20px;text-align:center;flex-shrink:0}
+.file-tree .children{overflow:hidden;transition:max-height 0.3s ease}
+.file-tree .children.collapsed{max-height:0}
+.file-tree .children.expanded{max-height:2000px}
+.file-tree .indent{padding-left:var(--space-24)}
+.file-tree .file .icon{color:var(--text-tertiary)}
+.file-tree .file .name{color:var(--text-secondary)}
+footer{border-top:1px solid var(--border);padding:var(--space-32) 0;text-align:center;font-size:var(--text-xs);color:var(--text-tertiary)}
+@media(max-width:768px){.card-grid-3,.card-grid-2{grid-template-columns:1fr}.card-grid-6{grid-template-columns:repeat(2,1fr)}.experiment-grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:var(--text-2xl)}section{padding:var(--space-48) 0}}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class=nav-inner>
+    <div class=nav-logo>🌳 Bob 的树屋病例</div>
+    <ul class=nav-links>
+      <li><a href=#structure>结构</a></li>
+      <li><a href=#conditions>病症</a></li>
+      <li><a href=#data>数据资产</a></li>
+      <li><a href=#experiment>实验</a></li>
+      <li><a href=#timeline>时间线</a></li>
+      <li><a href=#medications>用药</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class=hero>
+  <div class=section-inner>
+    <h1>Bob 的 <span>树屋病例</span></h1>
+    <p>一套以 Markdown + CSV 构建的个人健康档案系统。追踪 3 种慢性病症，收集环境、用药、症状数据，用对照实验验证诱因假说。</p>
+    <p class=meta>数据覆盖 2025-2026 · 5 城对照实验 · 4 次就医 · 9 种用药 · 12+ 条待验证假说</p>
+  </div>
+</section>
+
+<!-- Conditions -->
+<section id=conditions>
+  <div class=section-inner-wide>
+    <div class=section-label>病症概览</div>
+    <div class=section-title>追踪中的 3 种病症</div>
+    <div class=card-grid-3 style=margin-top:var(--space-32)>
+      <div class=card cond-card>
+        <div class=status-row><span class=emoji>🤧</span><span class=name>过敏性鼻炎</span><span class=status active>活跃中</span></div>
+        <div class=diagnosis>尘螨过敏（点刺强阳性）</div>
+        <div class=summary>5 城对照实验验证：离开低洼潮湿环境后完全无症状。家中尘螨为主因，空调冷空气为协同扳机——在北京/杭州/上海开空调完全没事。</div>
+        <div class=stats>
+          <div class=stat-row><span class=lbl>主因</span><span class=val>尘螨（点刺+++）</span></div>
+          <div class=stat-row><span class=lbl>已排除</span><span class=val>饮食 / 感冒 / 空调本身</span></div>
+          <div class=stat-row><span class=lbl>已尝试</span><span class=val>4 种方案（均效果有限）</span></div>
+        </div>
+      </div>
+      <div class=card cond-card>
+        <div class=status-row><span class=emoji>🫁</span><span class=name>气胸</span><span class=status monitoring>监测中</span></div>
+        <div class=diagnosis>自发性气胸（推测原发性，与体型相关）</div>
+        <div class=summary>初二首发左肺压缩 60%，行肺大泡切除术。高中三年每到换季复发，大学后频率显著下降，近两年仅轻微发作 2 次。与鼻炎发作时间重叠。</div>
+        <div class=stats>
+          <div class=stat-row><span class=lbl>首次发作</span><span class=val>初二（左肺 60%）</span></div>
+          <div class=stat-row><span class=lbl>手术</span><span class=val>肺大泡切除术</span></div>
+          <div class=stat-row><span class=lbl>大学后</span><span class=val>仅轻微发作 2 次</span></div>
+        </div>
+      </div>
+      <div class=card cond-card>
+        <div class=status-row><span class=emoji>🩺</span><span class=name>皮肤病</span><span class=status improving>好转中</span></div>
+        <div class=diagnosis>毛囊炎+痤疮（细菌+真菌混合感染）</div>
+        <div class=summary>2026-07-23 新桥医院复查：皮炎基本恢复，痘痘减少。口服药从米诺环素（抗生素）升级为异维A酸（根源控油）。外用药 7 种分面部/身体双线，保湿辅助。</div>
+        <div class=stats>
+          <div class=stat-row><span class=lbl>当前用药</span><span class=val>9 种（面3+身4+口服2）</span></div>
+          <div class=stat-row><span class=lbl>就医次数</span><span class=val>4 次（2025.7 - 2026.7）</span></div>
+          <div class=stat-row><span class=lbl>诊断演变</span><span class=val>纯真菌→混合→毛囊炎+痤疮</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Data Assets -->
+<section id=data style=padding-top:0>
+  <div class=section-inner-wide>
+    <div class=section-label>数据资产</div>
+    <div class=section-title>用数字追踪健康</div>
+    <div class=card-grid-6 style=margin-top:var(--space-32)>
+      <div class=card counter-card><div class=num>3</div><div class=lbl>追踪病症</div></div>
+      <div class=card counter-card><div class=num>9</div><div class=lbl>当前用药</div></div>
+      <div class=card counter-card><div class=num>4</div><div class=lbl>就医记录</div></div>
+      <div class=card counter-card><div class=num>7</div><div class=lbl>CSV 数据表</div></div>
+      <div class=card counter-card><div class=num>5</div><div class=lbl>城市对照实验</div></div>
+      <div class=card counter-card><div class=num>12+</div><div class=lbl>待验证假说</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Rhinitis 5-City Experiment -->
+<section id=experiment style=padding-top:0>
+  <div class=section-inner-wide>
+    <div class=section-label>鼻炎地域对照实验</div>
+    <div class=section-title>5 座城市，1 个结论</div>
+    <p class=section-subtitle>2026 年 6 月，在不同城市记录鼻炎症状。结论：尘螨是根，空调只是扳机。离开低洼潮湿环境后，空调不再是威胁。</p>
+    <div class=experiment-grid style=margin-top:var(--space-32)>
+      <div class=exp-card><div class=city>北京（大学）</div><div class=env>干燥北方</div><div class='result ok'>✅ 完全无症状</div></div>
+      <div class=exp-card><div class=city>杭州（旅行）</div><div class=env>江南湿润</div><div class='result ok'>✅ 完全无症状</div></div>
+      <div class=exp-card><div class=city>上海（旅行）</div><div class=env>沿海城市</div><div class='result ok'>✅ 完全无症状</div></div>
+      <div class=exp-card><div class=city>重庆 20F（民宿）</div><div class=env>高层通风</div><div class='result mild'>⚠️ 仅 2-3 个喷嚏</div></div>
+      <div class=exp-card><div class=city>重庆 家中（江北嘴）</div><div class=env>低洼潮湿 1F</div><div class='result bad'>🔴 连续喷嚏止不住</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Medical Timeline -->
+<section id=timeline style=padding-top:0>
+  <div class=section-inner>
+    <div class=section-label>就医时间线</div>
+    <div class=section-title>从初二到大学的病程追踪</div>
+    <div class=timeline style=margin-top:var(--space-32)>
+      <div class=tl-item><div class=tl-date>约 2017 年</div><div class=tl-title>首次气胸发作</div><div class=tl-desc>左肺压缩 60%。重庆市第五人民医院行插管引流 + 肺大泡切除术。</div></div>
+      <div class=tl-item><div class=tl-date>约 2018 年</div><div class=tl-title>气胸复发</div><div class=tl-desc>术后约大半年，五一假期复发，左肺压缩 50%。住院吸氧，自行恢复。</div></div>
+      <div class=tl-item><div class=tl-date>2019-2022 年</div><div class=tl-title>高中反复发作</div><div class=tl-desc>每到换季易复发，未再治疗，身体自行吸收。鼻炎同期加重，换季时打喷嚏→小感冒→肺炎。</div></div>
+      <div class=tl-item><div class=tl-date>2022-2025 年</div><div class=tl-title>大学后频率下降</div><div class=tl-desc>仅轻微发作 2 次，自行恢复。在北京干燥环境下鼻炎完全消失。健身 3-4 次/周，身体状况改善。</div></div>
+      <div class=tl-item><div class=tl-date>2025-07-17</div><div class=tl-title>重庆市中医院 — 皮肤病初诊</div><div class=tl-desc>马拉色菌阳性（真菌）。伊曲康唑口服 + 萘替芬酮康唑外用 + 中药。首次获得明确病原诊断。</div></div>
+      <div class=tl-item><div class=tl-date>2026-07-07</div><div class=tl-title>真菌检查复查</div><div class=tl-desc>少量真菌 + 大部分细菌混合感染。感染菌群构成变化，治疗需同时覆盖真菌和细菌。</div></div>
+      <div class=tl-item><div class=tl-date>2026-07-08</div><div class=tl-title>新桥医院皮肤科 — 正式就诊</div><div class=tl-desc>诊断毛囊炎+痤疮。面部三药分时段 + 身体抗真菌+抗细菌双覆盖 + 口服米诺环素+依巴斯汀。三周后复诊。</div></div>
+      <div class=tl-item><div class=tl-date>2026-07-23</div><div class=tl-title>新桥医院 — 首次复查</div><div class=tl-desc>皮炎基本恢复，痘痘减少。口服升级为异维 A 酸（根源控油）。米诺环素+依巴斯汀吃完即停。20 天后复诊。</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Medication Stats -->
+<section id=medications style=padding-top:0>
+  <div class=section-inner>
+    <div class=section-label>用药统计</div>
+    <div class=section-title>9 种药物的分布</div>
+    <div class=card style=margin-top:var(--space-32);padding:var(--space-40)>
+      <div class=chart-wrap><canvas id=medChart></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- Cross-Condition Observations -->
+<section id=insights style=padding-top:0>
+  <div class=section-inner-wide>
+    <div class=section-label>跨病症观察</div>
+    <div class=section-title>潜在关联与待验证的方向</div>
+    <div class=card-grid-3 style=margin-top:var(--space-32)>
+      <div class=card insight-card>
+        <div class=insight-label>关联 01</div>
+        <div class=insight-title>气胸 ↔ 换季</div>
+        <div class=insight-detail>高中三年每到换季复发气胸，鼻炎也在换季加重。假设：剧烈喷嚏→胸腔压力骤增→诱发气胸？或换季时免疫力波动同时触发两种病症。</div>
+      </div>
+      <div class=card insight-card>
+        <div class=insight-label>关联 02</div>
+        <div class=insight-title>鼻炎 ↔ 皮肤</div>
+        <div class=insight-detail>过敏体质（Th2 免疫偏向）可能同时影响呼吸道和皮肤。待验证：鼻炎发作期间，皮肤病是否同步加重？</div>
+      </div>
+      <div class=card insight-card>
+        <div class=insight-label>已解决 ✅</div>
+        <div class=insight-title>空调 ↔ 鼻炎（推翻）</div>
+        <div class=insight-detail>原以为空调内部不干净导致过敏。北京/杭州/上海用空调完全无症状→推翻。结论：空调是协同扳机，根在尘螨。冷空气降低鼻黏膜反应阈值。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Hypotheses -->
+<section style=padding-top:0>
+  <div class=section-inner>
+    <div class=section-label>未解之谜</div>
+    <div class=section-title>待验证的假说与问题</div>
+    <p class=section-subtitle>每一个假设对应一个可执行的验证实验。这是这套系统的核心价值——不是看病，是科学地理解自己的身体模式。</p>
+    <div style=margin-top:var(--space-32) id=hypotheses></div>
+  </div>
+</section>
+
+<!-- Project Structure -->
+<section id=structure>
+  <div class=section-inner>
+    <div class=section-label>项目结构</div>
+    <div class=section-title>数据如何组织</div>
+    <p class=section-subtitle style=margin-bottom:var(--space-24)>基于文件系统的朴素架构：病症追踪独立文件夹，跨病种数据汇入 tracking/，知识沉淀在知识库/。</p>
+    <div class=card style=padding:var(--space-32)>
+      <div class=file-tree id=tree></div>
+    </div>
+  </div>
+</section>
+
+
+<footer>
+  <div class=section-inner>
+    <p>数据来源：个人健康档案系统 E:\病历\ · 最后更新 2026-07-25</p>
+    <p style=margin-top:var(--space-8)>Built with curiosity · 不是看病，是理解身体模式</p>
+  </div>
+</footer>
+
+<script>
+// ===== FILE TREE =====
+const treeData = [
+  {name:'健康管理中心.md',type:'file'},
+  {name:'个人基础信息.md',type:'file'},
+  {name:'用药记录.md',type:'file'},
+  {name:'就医记录.md',type:'file'},
+  {name:'病症追踪/',type:'folder',children:[
+    {name:'过敏性鼻炎/',type:'folder',children:[
+      {name:'病症档案.md',type:'file'},
+      {name:'症状日志.csv',type:'file'},
+      {name:'环境数据.csv',type:'file'},
+      {name:'2026-06-27_初次分析.md',type:'file'},
+    ]},
+    {name:'气胸/',type:'folder',children:[
+      {name:'病症档案.md',type:'file'},
+      {name:'症状日志.csv',type:'file'},
+    ]},
+    {name:'皮肤病/',type:'folder',children:[
+      {name:'病症档案.md',type:'file'},
+      {name:'症状日志.csv',type:'file'},
+    ]},
+  ]},
+  {name:'tracking/',type:'folder',children:[
+    {name:'体检指标.csv',type:'file'},
+    {name:'症状汇总.csv',type:'file'},
+    {name:'用药打卡.csv',type:'file'},
+  ]},
+  {name:'知识库/',type:'folder',children:[
+    {name:'过敏诱因.md',type:'file'},
+    {name:'有效措施.md',type:'file'},
+    {name:'推荐字段标准.md',type:'file'},
+  ]},
+  {name:'报告原件/',type:'folder',children:[
+    {name:'2026-07-07_检查报告.jpg',type:'file'},
+    {name:'2026-07-23_就诊单_1.jpg',type:'file'},
+    {name:'2026-07-23_就诊单_2.jpg',type:'file'},
+  ]},
+];
+
+function buildTree(items,level){
+  let h='';
+  for(let item of items){
+    if(item.type==='folder'){
+      h+='<div class=folder onclick=toggleFolder(this) style=padding-left:'+(level*24)+'px><span class=icon>📁</span><span>'+item.name+'</span></div>';
+      h+='<div class=children expanded>';
+      h+=buildTree(item.children,level+1);
+      h+='</div>';
+    }else{
+      let icon=item.name.endsWith('.csv')?'📊':item.name.endsWith('.md')?'📝':item.name.endsWith('.jpg')?'🖼️':'📄';
+      h+='<div class=file style=padding-left:'+(level*24)+'px><span class=icon>'+icon+'</span><span class=name>'+item.name+'</span></div>';
+    }
+  }
+  return h;
+}
+document.getElementById('tree').innerHTML=buildTree(treeData,0);
+function toggleFolder(el){
+  let children=el.nextElementSibling;
+  if(children&&children.classList.contains('children')){
+    children.classList.toggle('expanded');
+    children.classList.toggle('collapsed');
+  }
+}
+
+// ===== HYPOTHESES ACCORDION =====
+const hypotheses = [
+  {q:'湿度降到 50% 以下后，鼻炎症状是否显著减少？',a:'核心待验证假说。购买湿度计 + 除湿机，记录湿度与症状 30 天。尘螨在湿度 >55% 时繁殖最活跃，<50% 理论上可抑制。'},
+  {q:'开学回北京后症状是否自动消失？',a:'纯环境因素验证。北京干燥 + 大学宿舍非低洼环境 → 预测症状消失。如果应验，进一步确认根在环境而非其他因素。'},
+  {q:'空调温度 ≥26°C 是否显著减少喷嚏？',a:'冷空气假说验证。设置空调 26°C vs 24°C vs 22°C，记录喷嚏和鼻塞程度。测试冷空气作为协同扳机的温度阈值。'},
+  {q:'尘螨舌下脱敏为什么效果不好？',a:'坚持一年多，效果不显著。可能原因：①依从性不足（需每日严格使用数年）②尘螨致敏程度过高导致标准方案不够③本身对该疗法应答不佳。需咨询专科医生。'},
+  {q:'厚被子实验能复现吗？',a:'2026-07-01 盖厚被子→全天零喷嚏，次日猛烈复发。仅一个数据点无法排除巧合。需连续多晚验证：夜间保暖→减少鼻腔冷刺激→喷嚏阈值提高？'},
+  {q:'剧烈喷嚏是否会诱发气胸？',a:'气胸换季复发与鼻炎发作时间重叠。假设：剧烈喷嚏→胸腔压力骤增→诱发肺大泡破裂。待收集更多数据验证时间相关性。'},
+  {q:'皮肤病与鼻炎免疫状态有关？',a:'鼻炎发作时免疫系统处于 Th2 主导，可能影响皮肤免疫。需对比鼻炎发作期 vs 无症状期的皮肤病严重程度。'},
+  {q:'保湿能否长期控制皮炎部分？',a:'已验证身体乳可缓解皮炎。持续保湿 → 修复皮肤屏障 → 降低整体炎症 → 毛囊炎也可能减轻？需长期追踪。'},
+  {q:'抠痂行为是习惯性还是焦虑驱动？',a:'自述习惯性抠痂。需区分：①纯粹习惯（无意识动作）②焦虑/压力触发（emo 时加重）。不同原因需要不同干预策略。'},
+  {q:'鼻炎→感冒转化是真实机制还是巧合？',a:'2026-07-01 出现咳嗽新症状。三条可能路径：①鼻炎削弱防御→病毒继发感染 ②鼻后滴漏刺激咽喉（非感染性）③巧合。需监测每次鼻炎后感冒发生率。'},
+  {q:'诊断演变的真正原因？',a:'皮肤病：2025 纯真菌→2026 少量真菌+大部分细菌→毛囊炎+痤疮。是菌群构成真的在变化，还是不同检测方法/医院的侧重点不同？'},
+];
+
+let hypoHTML='';
+hypotheses.forEach((h,i)=>{
+  hypoHTML+='<div class=accordion><button class=accordion-header onclick=this.parentElement.classList.toggle(\'open\')><span>#'+(i+1)+' '+h.q+'</span><span class=arrow>▼</span></button><div class=accordion-body>'+h.a+'</div></div>';
+});
+document.getElementById('hypotheses').innerHTML=hypoHTML;
+
+// ===== CHART.JS DONUT =====
+new Chart(document.getElementById('medChart'),{
+  type:'doughnut',
+  data:{
+    labels:['面部外用','身体外用','口服','洗护保湿'],
+    datasets:[{
+      data:[3,4,2,2],
+      backgroundColor:['#2D8A7B','#4CAF84','#C4823E','#D4A843'],
+      borderColor:'#FFFCF7',
+      borderWidth:2,
+      hoverBorderColor:'#FFFCF7',
+    }]
+  },
+  options:{
+    responsive:true,
+    maintainAspectRatio:true,
+    cutout:'60%',
+    plugins:{
+      legend:{
+        position:'bottom',
+        labels:{
+          padding:20,
+          usePointStyle:true,
+          pointStyleWidth:8,
+          font:{family:'-apple-system,BlinkMacSystemFont,Segoe UI,PingFang SC,sans-serif',size:13},
+          color:'#7A7268'
+        }
+      },
+      tooltip:{
+        callbacks:{
+          label:function(ctx){return ctx.label+': '+ctx.raw+' 种';}
+        }
+      }
+    }
+  }
+});
+
+// ===== COUNTER ANIMATION =====
+const observer=new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const nums=e.target.querySelectorAll('.num');
+      nums.forEach(n=>{
+        const target=n.textContent.replace('+','');
+        if(isNaN(target))return;
+        const suffix=n.textContent.includes('+')?'+':'';
+        const duration=1500;
+        const start=performance.now();
+        const from=0;
+        const to=parseInt(target);
+        function update(now){
+          const elapsed=now-start;
+          const progress=Math.min(elapsed/duration,1);
+          const eased=1-Math.pow(1-progress,3);
+          n.textContent=(from+Math.round((to-from)*eased))+suffix;
+          if(progress<1)requestAnimationFrame(update);
+          else n.textContent=target+suffix;
+        }
+        requestAnimationFrame(update);
+      });
+      observer.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.card-grid-6').forEach(g=>observer.observe(g));
+
+</script>
+</body>
+</html>
