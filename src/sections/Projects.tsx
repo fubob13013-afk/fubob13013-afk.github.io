@@ -168,39 +168,56 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
         </div>
       </div>
 
-      {/* 全宽工作流：按功能分四排，截图统一尺寸（4 列） */}
+      {/* 全宽工作流：左侧竖向节点时间线，右侧内容整体右移 */}
       <div className="fade-up mt-12">
         <h3 className="text-2xl font-bold text-foreground">一次完整使用的工作流</h3>
 
-        {/* 第一排：主题切换 */}
-        <p className="mt-6 text-lg font-bold text-primary">主题切换 · 亮色 / 暗色双主题</p>
-        <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <PhoneShot src="/img/voice/theme-light.png" caption="亮色主题" onZoom={setZoom} />
-          <PhoneShot src="/img/voice/theme-dark.png" caption="暗色主题" onZoom={setZoom} />
-        </div>
+        <div className="relative mt-6 md:pl-14">
+          {/* 竖向节点线 */}
+          <div className="absolute bottom-2 left-[7px] top-2 hidden w-px bg-primary/30 md:block" />
 
-        {/* 第二排：语音对话三连 */}
-        <p className="mt-6 text-lg font-bold text-primary">语音对话 · 从问答到指挥</p>
-        <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <PhoneShot src="/img/voice/convo-hello.png" caption="唤醒对话 ·「你好，你能做什么」" onZoom={setZoom} />
-          <PhoneShot src="/img/voice/step2-sendmsg.png" caption="发消息 ·「帮我给爸爸发一条消息」" onZoom={setZoom} />
-          <PhoneShot src="/img/voice/step5-claude.png" caption="调用电脑 Claude Code 跑任务" onZoom={setZoom} />
-        </div>
+          {/* 第一排：主题切换 */}
+          <div className="relative">
+            <span className="absolute -left-14 top-1.5 hidden size-[15px] rounded-full border-2 border-primary bg-background md:block" />
+            <p className="text-lg font-bold text-primary">主题切换 · 亮色 / 暗色双主题</p>
+            <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
+              <PhoneShot src="/img/voice/theme-light.png" caption="亮色主题" onZoom={setZoom} />
+              <PhoneShot src="/img/voice/theme-dark.png" caption="暗色主题" onZoom={setZoom} />
+            </div>
+          </div>
 
-        {/* 第三排：提醒闭环 */}
-        <p className="mt-6 text-lg font-bold text-primary">提醒闭环 · 一句话创建 → 触发 → 管理</p>
-        <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <PhoneShot src="/img/voice/remind-2pm5pm.png" caption="创建 ·「定下午 2 点和 5 点的提醒」" onZoom={setZoom} />
-          <PhoneShot src="/img/voice/step6-remind-alert.png" caption="触发 · 响铃震动，息屏也生效" onZoom={setZoom} />
-          <PhoneShot src="/img/voice/step8-manage.png" caption="管理 · 已建任务总览" onZoom={setZoom} />
-          <PhoneShot src="/img/voice/step4-remind-setup.png" caption="配置详情 · 重复规则自动生成" onZoom={setZoom} />
-        </div>
+          {/* 第二排：语音对话三连 */}
+          <div className="relative mt-6">
+            <span className="absolute -left-14 top-1.5 hidden size-[15px] rounded-full border-2 border-primary bg-background md:block" />
+            <p className="text-lg font-bold text-primary">语音对话 · 从问答到指挥</p>
+            <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
+              <PhoneShot src="/img/voice/convo-hello.png" caption="唤醒对话 ·「你好，你能做什么」" onZoom={setZoom} />
+              <PhoneShot src="/img/voice/step2-sendmsg.png" caption="发消息 ·「帮我给爸爸发一条消息」" onZoom={setZoom} />
+              <PhoneShot src="/img/voice/step5-claude.png" caption="调用电脑 Claude Code 跑任务" onZoom={setZoom} />
+            </div>
+          </div>
 
-        {/* 第四排：记忆系统 */}
-        <p className="mt-6 text-lg font-bold text-primary">记忆系统 · 历史可回溯，可延续</p>
-        <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <PhoneShot src="/img/voice/step7-history.png" caption="会话历史 · 过往对话全量保存" onZoom={setZoom} />
-          <PhoneShot src="/img/voice/theme-resume.png" caption="继续这段对话 · 从任意历史会话接续" onZoom={setZoom} />
+          {/* 第三排：提醒闭环 */}
+          <div className="relative mt-6">
+            <span className="absolute -left-14 top-1.5 hidden size-[15px] rounded-full border-2 border-primary bg-background md:block" />
+            <p className="text-lg font-bold text-primary">提醒闭环 · 一句话创建 → 触发 → 管理</p>
+            <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
+              <PhoneShot src="/img/voice/remind-2pm5pm.png" caption="创建 ·「定下午 2 点和 5 点的提醒」" onZoom={setZoom} />
+              <PhoneShot src="/img/voice/step6-remind-alert.png" caption="触发 · 响铃震动，息屏也生效" onZoom={setZoom} />
+              <PhoneShot src="/img/voice/step8-manage.png" caption="管理 · 已建任务总览" onZoom={setZoom} />
+              <PhoneShot src="/img/voice/step4-remind-setup.png" caption="配置详情 · 重复规则自动生成" onZoom={setZoom} />
+            </div>
+          </div>
+
+          {/* 第四排：记忆系统 */}
+          <div className="relative mt-6">
+            <span className="absolute -left-14 top-1.5 hidden size-[15px] rounded-full border-2 border-primary bg-background md:block" />
+            <p className="text-lg font-bold text-primary">记忆系统 · 历史可回溯，可延续</p>
+            <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
+              <PhoneShot src="/img/voice/step7-history.png" caption="会话历史 · 过往对话全量保存" onZoom={setZoom} />
+              <PhoneShot src="/img/voice/theme-resume.png" caption="继续这段对话 · 从任意历史会话接续" onZoom={setZoom} />
+            </div>
+          </div>
         </div>
       </div>
 
