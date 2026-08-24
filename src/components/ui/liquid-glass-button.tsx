@@ -12,7 +12,7 @@ const liquidbuttonVariants = cva(
       variant: {
         default: "bg-transparent hover:scale-105 duration-300 transition text-primary",
         destructive: "bg-destructive text-white hover:bg-destructive/90",
-        outline: "border border-border bg-transparent hover:bg-muted hover:text-foreground",
+        outline: "border border-border bg-transparent hover:scale-105 duration-300 transition hover:bg-muted hover:text-foreground",
         ghost: "hover:bg-muted hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },

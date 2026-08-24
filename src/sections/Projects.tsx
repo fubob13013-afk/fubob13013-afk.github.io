@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { projects } from "@/data";
 import { useReveal } from "@/lib/useReveal";
 import { cn } from "@/lib/utils";
@@ -79,31 +79,108 @@ function Figure({ src, alt, caption, className }: { src: string; alt: string; ca
   );
 }
 
+/** 三态语音球：圆形裁切 + 边缘暗角压白（与 App 内 MediaOrb 同方案，MP4 无 alpha） */
+function OrbState({ src, label, size }: { src: string; label: string; size: "lg" | "sm" }) {
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <div
+        className={`relative overflow-hidden rounded-full ${
+          size === "lg" ? "h-44 w-44 md:h-56 md:w-56" : "h-28 w-28 md:h-32 md:w-32"
+        }`}
+      >
+        <video src={src} autoPlay loop muted playsInline className="h-full w-full object-cover" />
+        {/* 边缘暗角：压掉圆形边界处的白底残留 */}
+        <div
+          className="pointer-events-none absolute inset-0 rounded-full"
+          style={{ boxShadow: "inset 0 0 18px 10px rgba(11,15,20,0.55)" }}
+        />
+      </div>
+      <p className="text-center text-xs text-muted-foreground">{label}</p>
+    </div>
+  );
+}
+
+/** 手机截图：可点击放大 */
+function PhoneShot({ src, caption, onZoom }: { src: string; caption: string; onZoom: (s: string) => void }) {
+  return (
+    <figure className="glass-card p-2">
+      <img
+        src={src}
+        alt={caption}
+        loading="lazy"
+        onClick={() => onZoom(src)}
+        className="mx-auto h-80 cursor-zoom-in rounded-lg object-cover object-top md:h-96"
+      />
+      <figcaption className="py-2 text-center text-xs leading-5 text-muted-foreground">{caption}</figcaption>
+    </figure>
+  );
+}
+
 function VoiceMedia() {
+  const [zoom, setZoom] = useState<string | null>(null);
+  useEffect(() => {
+    document.body.style.overflow = zoom ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [zoom]);
+
+  const steps: [string, string, string][] = [
+    ["/img/voice/step1-hello.png", "① 唤醒对话", "「你好，你能做什么」——自然的开场问答"],
+    ["/img/voice/step2-sendmsg.png", "② 发消息", "「帮我给爸爸发一条消息」——直接指挥手机"],
+    ["/img/voice/step3-remind.png", "③ 设提醒", "「定每天晚上十点的提醒」——异步任务委派"],
+    ["/img/voice/step4-remind-setup.png", "④ 提醒配置", "重复规则 / 时间点，一句话自动生成"],
+    ["/img/voice/step5-claude.png", "⑤ 调用 Claude Code", "语音直达电脑 Agent——发消息、跑任务"],
+    ["/img/voice/step6-history.png", "⑥ 会话历史", "记忆系统：历史可回溯，可继续某段对话"],
+    ["/img/voice/step7-manage.png", "⑦ 管理提醒", "已建任务总览——手机电脑双端可查"],
+  ];
+
   return (
     <div className="space-y-6">
-      <div className="glass-card overflow-hidden p-4">
-        <video
-          src="/video/orb/listening.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="mx-auto max-h-72 rounded-lg"
-        />
-        <p className="mt-3 text-center text-xs text-muted-foreground">
-          语音球动画 · 倾听状态（idle / listening / speaking / thinking 四态）
+      {/* 三态语音球 */}
+      <div className="glass-card p-5">
+        <p className="text-sm font-semibold text-primary">三态语音球（真机在用）</p>
+        <div className="mt-5 flex items-end justify-center gap-6 md:gap-10">
+          <OrbState src="/video/orb/orb-idle.mp4" label="待机 DORMANT" size="sm" />
+          <OrbState src="/video/orb/orb-listening.mp4" label="聆听 LISTENING（大球 · 可讲话）" size="lg" />
+          <OrbState src="/video/orb/orb-working.mp4" label="工作中 WORKING（小球 · 勿扰）" size="sm" />
+        </div>
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          球体大小即状态语义：聆听时放大暗示「可以说话」，处理时缩小暗示「稍勿打扰」
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <Figure src="/img/phone-idle.png" alt="语音助手待机界面" caption="待机 · 语音球界面" />
-        <Figure src="/img/phone-orb.png" alt="语音助手会话界面" caption="会话中 · 小米 14 真机" />
+
+      {/* 使用流程状态图 */}
+      <div className="glass-card p-5">
+        <p className="text-sm font-semibold text-primary">一次完整使用的状态流</p>
+        <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+          {steps.slice(0, 4).map(([src, title, desc]) => (
+            <PhoneShot key={src} src={src} caption={`${title} · ${desc}`} onZoom={setZoom} />
+          ))}
+        </div>
+        <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-3">
+          {steps.slice(4).map(([src, title, desc]) => (
+            <PhoneShot key={src} src={src} caption={`${title} · ${desc}`} onZoom={setZoom} />
+          ))}
+        </div>
       </div>
+
       <Figure
         src="/img/workbench.png"
         alt="电脑工作台全链路时间线"
-        caption="电脑工作台：全链路时间线（用户 / 豆包 / 工具 / Claude / 系统），永久保存"
+        caption="电脑工作台：监视正在进行的对话 · 全链路时间线（用户 / 豆包 / 工具 / Claude / 系统），永久保存"
       />
+
+      {/* 点击放大 */}
+      {zoom && (
+        <div
+          className="fixed inset-0 z-[100] flex cursor-zoom-out items-center justify-center bg-black/95 p-6"
+          onClick={() => setZoom(null)}
+        >
+          <img src={zoom} alt="" className="max-h-[92vh] object-contain" />
+          <p className="absolute bottom-6 text-xs tracking-widest text-white/40">点击任意处关闭</p>
+        </div>
+      )}
     </div>
   );
 }
