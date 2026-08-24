@@ -130,13 +130,14 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
   }, [zoom]);
 
   const steps: [string, string, string][] = [
-    ["/img/voice/step1-hello.png", "① 唤醒对话", "「你好，你能做什么」——自然的开场问答"],
-    ["/img/voice/step2-sendmsg.png", "② 发消息", "「帮我给爸爸发一条消息」——直接指挥手机"],
-    ["/img/voice/step3-remind.png", "③ 设提醒", "「定每天晚上十点的提醒」——异步任务委派"],
+    ["/img/voice/step1-hello.png", "① 唤醒对话", "「你好，你能做什么」--自然的开场问答"],
+    ["/img/voice/step2-sendmsg.png", "② 发消息", "「帮我给爸爸发一条消息」--直接指挥手机"],
+    ["/img/voice/step3-remind.png", "③ 设提醒", "「定每天晚上十点的提醒」--异步任务委派"],
     ["/img/voice/step4-remind-setup.png", "④ 提醒配置", "重复规则 / 时间点，一句话自动生成"],
-    ["/img/voice/step5-claude.png", "⑤ 调用 Claude Code", "语音直达电脑 Agent——发消息、跑任务"],
-    ["/img/voice/step6-history.png", "⑥ 会话历史", "记忆系统：历史可回溯，可继续某段对话"],
-    ["/img/voice/step7-manage.png", "⑦ 管理提醒", "已建任务总览——手机电脑双端可查"],
+    ["/img/voice/step5-claude.png", "⑤ 调用 Claude Code", "语音直达电脑 Agent--发消息、跑任务"],
+    ["/img/voice/step6-remind-alert.png", "⑥ 提醒触发", "响铃 + 震动--息屏 / 桌面状态均生效"],
+    ["/img/voice/step7-history.png", "⑦ 会话历史", "记忆系统：历史可回溯，可继续某段对话"],
+    ["/img/voice/step8-manage.png", "⑧ 管理提醒", "已建任务总览--手机电脑双端可查"],
   ];
 
   return (
