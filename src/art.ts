@@ -76,7 +76,7 @@ export const artworks: ArtWork[] = [
     titleCn: "死亡搁浅",
     subtitle: "Fan-Made Scene",
     tags: "建模 / 渲染 / 剪辑",
-    cover: "/img/art/deathstranding.jpg",
+    cover: "/img/art/deathstranding_1_583.png",
     hero: "/img/art/deathstranding_1_583.png",
     oneliner: "末世氛围的场景复刻",
     story: [
