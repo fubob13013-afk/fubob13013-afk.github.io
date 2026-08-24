@@ -79,15 +79,11 @@ function Figure({ src, alt, caption, className }: { src: string; alt: string; ca
   );
 }
 
-/** 三态语音球：紧裁切圆形，视频轻微放大让圆边刚好卡在球体上 */
-function OrbRow({ src, title, desc, big }: { src: string; title: string; desc: string; big?: boolean }) {
+/** 三态语音球：统一尺寸，点击循环切换状态（模拟 App 内的球体状态机） */
+function OrbRow({ src, title, desc }: { src: string; title: string; desc: string }) {
   return (
     <div className="flex items-center gap-4">
-      <div
-        className={`relative shrink-0 overflow-hidden rounded-full ${
-          big ? "h-32 w-32 md:h-40 md:w-40" : "h-20 w-20 md:h-24 md:w-24"
-        }`}
-      >
+      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full md:h-24 md:w-24">
         <video src={src} autoPlay loop muted playsInline className="h-full w-full scale-[1.06] object-cover" />
         <div
           className="pointer-events-none absolute inset-0 rounded-full"
@@ -95,7 +91,7 @@ function OrbRow({ src, title, desc, big }: { src: string; title: string; desc: s
         />
       </div>
       <div className="min-w-0">
-        <p className={`font-semibold ${big ? "text-base text-primary" : "text-sm text-foreground"}`}>{title}</p>
+        <p className="text-sm font-semibold text-foreground">{title}</p>
         <p className="mt-0.5 text-xs leading-5 text-muted-foreground">{desc}</p>
       </div>
     </div>
@@ -129,17 +125,6 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
     };
   }, [zoom]);
 
-  const steps: [string, string, string][] = [
-    ["/img/voice/step1-hello.png", "① 唤醒对话", "「你好，你能做什么」--自然的开场问答"],
-    ["/img/voice/step2-sendmsg.png", "② 发消息", "「帮我给爸爸发一条消息」--直接指挥手机"],
-    ["/img/voice/step3-remind.png", "③ 设提醒", "「定每天晚上十点的提醒」--异步任务委派"],
-    ["/img/voice/step4-remind-setup.png", "④ 提醒配置", "重复规则 / 时间点，一句话自动生成"],
-    ["/img/voice/step5-claude.png", "⑤ 调用 Claude Code", "语音直达电脑 Agent--发消息、跑任务"],
-    ["/img/voice/step6-remind-alert.png", "⑥ 提醒触发", "响铃 + 震动--息屏 / 桌面状态均生效"],
-    ["/img/voice/step7-history.png", "⑦ 会话历史", "记忆系统：历史可回溯，可继续某段对话"],
-    ["/img/voice/step8-manage.png", "⑧ 管理提醒", "已建任务总览--手机电脑双端可查"],
-  ];
-
   return (
     <section id={project.id} ref={ref} className="mx-auto max-w-6xl scroll-mt-20 px-6 py-20">
       <div className="fade-up mb-8">
@@ -172,29 +157,50 @@ function VoiceProject({ project }: { project: (typeof projects)[number] }) {
         </div>
         <div className="glass-card p-6">
           <p className="text-sm font-semibold text-primary">三态语音球（真机在用）</p>
-          <div className="mt-6 space-y-7">
-            <OrbRow src="/video/orb/orb-idle.mp4" title="待机 DORMANT" desc="会话外默认小球，安静等待" />
-            <OrbRow
-              src="/video/orb/orb-listening.mp4"
-              title="聆听 LISTENING"
-              desc="大球放大——暗示「可以讲话」"
-              big
-            />
-            <OrbRow src="/video/orb/orb-working.mp4" title="工作中 WORKING" desc="缩小+低亮度——暗示「稍勿打扰」" />
+          <div className="mt-6 space-y-6">
+            <OrbRow src="/video/orb/orb-idle.mp4" title="待机 DORMANT" desc="会话外默认状态，安静等待" />
+            <OrbRow src="/video/orb/orb-listening.mp4" title="聆听 LISTENING" desc="大球语义——可以讲话" />
+            <OrbRow src="/video/orb/orb-working.mp4" title="工作中 WORKING" desc="缩小语义——稍勿打扰" />
           </div>
           <p className="mt-6 text-xs leading-5 text-muted-foreground">
-            球体大小即状态语义：无需文字，一眼读懂助手当前能否插话。
+            真机上球体随语音状态实时切换：聆听时放大暗示「可以说话」，处理时缩小暗示「稍勿打扰」——无需文字，一眼读懂。
           </p>
         </div>
       </div>
 
-      {/* 全宽状态流：原始手机比例，大图 */}
+      {/* 全宽工作流：按功能分四排 */}
       <div className="fade-up mt-12">
-        <h3 className="text-sm font-semibold tracking-widest text-primary">一次完整使用的状态流</h3>
-        <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {steps.map(([src, title, desc]) => (
-            <PhoneShot key={src} src={src} caption={`${title} · ${desc}`} onZoom={setZoom} />
-          ))}
+        <h3 className="text-sm font-semibold tracking-widest text-primary">一次完整使用的工作流</h3>
+
+        {/* 第一排：主题切换 */}
+        <p className="mt-5 text-xs text-muted-foreground">主题切换 · 亮色 / 暗色双主题</p>
+        <div className="mt-3 grid grid-cols-2 gap-4">
+          <PhoneShot src="/img/voice/theme-light.png" caption="亮色主题" onZoom={setZoom} />
+          <PhoneShot src="/img/voice/theme-dark.png" caption="暗色主题" onZoom={setZoom} />
+        </div>
+
+        {/* 第二排：语音对话三连 */}
+        <p className="mt-6 text-xs text-muted-foreground">语音对话 · 从问答到指挥</p>
+        <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-3">
+          <PhoneShot src="/img/voice/convo-hello.png" caption="唤醒对话 ·「你好，你能做什么」" onZoom={setZoom} />
+          <PhoneShot src="/img/voice/step2-sendmsg.png" caption="发消息 ·「帮我给爸爸发一条消息」" onZoom={setZoom} />
+          <PhoneShot src="/img/voice/step5-claude.png" caption="调用电脑 Claude Code 跑任务" onZoom={setZoom} />
+        </div>
+
+        {/* 第三排：提醒闭环 */}
+        <p className="mt-6 text-xs text-muted-foreground">提醒闭环 · 一句话创建 → 触发 → 管理</p>
+        <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-4">
+          <PhoneShot src="/img/voice/remind-2pm5pm.png" caption="创建 ·「定下午 2 点和 5 点的提醒」" onZoom={setZoom} />
+          <PhoneShot src="/img/voice/step4-remind-setup.png" caption="配置详情 · 重复规则自动生成" onZoom={setZoom} />
+          <PhoneShot src="/img/voice/step6-remind-alert.png" caption="触发 · 响铃震动，息屏也生效" onZoom={setZoom} />
+          <PhoneShot src="/img/voice/step8-manage.png" caption="管理 · 已建任务总览" onZoom={setZoom} />
+        </div>
+
+        {/* 第四排：记忆系统 */}
+        <p className="mt-6 text-xs text-muted-foreground">记忆系统 · 历史可回溯，可延续</p>
+        <div className="mt-3 grid grid-cols-2 gap-4 md:grid-cols-3">
+          <PhoneShot src="/img/voice/step7-history.png" caption="会话历史 · 过往对话全量保存" onZoom={setZoom} />
+          <PhoneShot src="/img/voice/theme-resume.png" caption="继续这段对话 · 从任意历史会话接续" onZoom={setZoom} />
         </div>
       </div>
 
