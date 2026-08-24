@@ -49,19 +49,32 @@ export function Artworks() {
           <h3 className="text-sm font-semibold tracking-widest text-primary">更多视觉</h3>
           <div className="mt-4 grid gap-5 sm:grid-cols-3">
             {otherVisualWorks.map((w) =>
-              w.placeholder ? (
-                <div
+              "link" in w && w.link ? (
+                <a
                   key={w.title}
-                  className="glass-card flex aspect-video flex-col items-center justify-center border-dashed"
+                  href={w.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="glass-card group block overflow-hidden transition-transform duration-300 hover:-translate-y-1"
                 >
-                  <p className="text-sm font-semibold text-muted-foreground">{w.title}</p>
-                  <p className="mt-1 text-xs text-muted-foreground/60">{w.desc}</p>
-                </div>
+                  <img
+                    src={w.img}
+                    alt={w.title}
+                    loading="lazy"
+                    className="aspect-video w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <figcaption className="p-3">
+                    <p className="text-sm font-semibold text-foreground">
+                      {w.title} <span className="text-primary">↗</span>
+                    </p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{w.desc}</p>
+                  </figcaption>
+                </a>
               ) : (
                 <figure key={w.title} className="glass-card overflow-hidden">
                   <img src={w.img} alt={w.title} loading="lazy" className="aspect-video w-full object-cover" />
                   <figcaption className="p-3">
-                    <p className="text-xs font-semibold text-foreground">{w.title}</p>
+                    <p className="text-sm font-semibold text-foreground">{w.title}</p>
                     <p className="mt-0.5 text-xs text-muted-foreground">{w.desc}</p>
                   </figcaption>
                 </figure>

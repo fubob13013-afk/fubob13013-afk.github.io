@@ -124,19 +124,14 @@ export const artworks: ArtWork[] = [
 
 export const otherVisualWorks = [
   {
-    img: "/img/mv.png",
+    img: "/img/universe-cover.jpg",
+    title: "我对宇宙说话",
+    desc: "B 站 AI 创作大赛 · 三体赛道",
+    link: "https://www.bilibili.com/video/BV1e5wyzBEPT/",
+  },
+  {
+    img: "/img/mv-cover.png",
     title: "清华毕业季 MV",
-    desc: "动画创作 · 从分镜到成片",
-  },
-  {
-    img: "/img/eye-render-01.png",
-    title: "CyberEyes 眼球渲染",
-    desc: "3D 结构与渲染",
-  },
-  {
-    img: "",
-    title: "AI 视频创作大赛",
-    desc: "资料整理中 · 即将上线",
-    placeholder: true,
+    desc: "动画风格概念 · 清华大礼堂",
   },
 ];
