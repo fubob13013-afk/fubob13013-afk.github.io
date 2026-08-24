@@ -12,6 +12,7 @@
   --color-border: #22303a;
   --color-destructive: #e5484d;
   --font-sans: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  --font-display: "Italiana", "Microsoft YaHei", serif;
 }
 
 html {

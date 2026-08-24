@@ -33,7 +33,7 @@ export function Artworks() {
               </div>
               <div className="flex items-end justify-between p-5">
                 <div>
-                  <h3 className="font-serif text-2xl italic tracking-wide text-foreground">{w.title}</h3>
+                  <h3 className="font-display text-2xl tracking-wide text-foreground">{w.title}</h3>
                   <p className="mt-1 text-xs text-muted-foreground">{w.titleCn} · {w.tags}</p>
                 </div>
                 <span className="ml-4 shrink-0 rounded-full border border-primary/40 px-3 py-1 text-xs text-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100">

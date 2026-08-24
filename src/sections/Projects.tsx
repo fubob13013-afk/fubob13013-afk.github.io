@@ -161,8 +161,6 @@ function HealthMedia() {
           </div>
         </div>
       </div>
-
-      <Figure src="/img/health-ui.png" alt="健康病例系统界面" caption="Web 界面 · AI 是操作入口（截图待更新）" />
     </div>
   );
 }
