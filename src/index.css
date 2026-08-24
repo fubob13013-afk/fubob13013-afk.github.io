@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #8eadb4;
+  --color-primary-foreground: #0b0f14;
+  --color-background: #0b0f14;
+  --color-foreground: #e6ecef;
+  --color-muted: #141b22;
+  --color-muted-foreground: #8a949c;
+  --color-card: #10161d;
+  --color-card-foreground: #e6ecef;
+  --color-border: #22303a;
+  --color-destructive: #e5484d;
+  --font-sans: "Microsoft YaHei", "微软雅黑", "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(142, 173, 180, 0.35);
+}
+
+/* 玻璃拟态卡片 */
+.glass-card {
+  background: rgba(20, 27, 34, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(142, 173, 180, 0.16);
+  border-radius: 1rem;
+}
+
+/* 区块标题左侧的青绿短线 */
+.section-rule {
+  width: 5rem;
+  height: 3px;
+  background: var(--color-primary);
+}
+
+/* 滚动进入淡入 */
+.fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .fade-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
